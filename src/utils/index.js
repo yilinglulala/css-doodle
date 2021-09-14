@@ -1,12 +1,18 @@
+// 区间限定函数
 export function clamp(num, min, max) {
+  // if(num>max) return max;
+  // if(num<min) return min;
+  // return num
   return Math.max(min, Math.min(max, num));
 }
 
+// cond条件成立则返回 value 值，否则返回 ''
 export function maybe(cond, value) {
   if (!cond) return '';
   return (typeof value === 'function') ? value() : value;
 }
 
+// 生成序列数组
 export function range(start, stop, step) {
   let count = 0, old = start;
   let initial = n => (n > 0 && n < 1) ? .1 : 1;
@@ -24,6 +30,7 @@ export function range(start, stop, step) {
   return range;
 }
 
+// 有点像 assign 的功能
 export function alias_for(obj, names) {
   Object.keys(names).forEach(n => {
     obj[n] = obj[names[n]];
@@ -31,9 +38,14 @@ export function alias_for(obj, names) {
   return obj;
 }
 
+/*
+判断是否是大小写英文字母
+@return Boolean
+ */
 export function is_letter(c) {
   return /^[a-zA-Z]$/.test(c);
 }
+
 
 export function is_nil(s) {
   return s === undefined || s === null;
@@ -42,13 +54,13 @@ export function is_nil(s) {
 export function is_empty(value) {
   return is_nil(value) || value === '';
 }
-
+// 懒执行函数
 export function lazy(fn) {
   let wrap = () => fn;
   wrap.lazy = true;
   return wrap;
 }
-
+// 
 export function sequence(count, fn) {
   let [x, y = 1] = String(count).split('x');
   x = clamp(parseInt(x) || 1, 1, 65536);
@@ -63,7 +75,7 @@ export function sequence(count, fn) {
   }
   return ret;
 }
-
+// 生成单元格id
 export function cell_id(x, y, z) {
   return 'c-' + x + '-' + y + '-' + z;
 }
