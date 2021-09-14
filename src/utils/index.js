@@ -2,12 +2,12 @@
 export function clamp(num, min, max) {
   return Math.max(min, Math.min(max, num));
 }
-
+// 若cond成立则返回value，否则返回''
 export function maybe(cond, value) {
   if (!cond) return '';
   return (typeof value === 'function') ? value() : value;
 }
-
+// 生成序列数组
 export function range(start, stop, step) {
   let count = 0, old = start;
   let initial = n => (n > 0 && n < 1) ? .1 : 1;
@@ -24,14 +24,14 @@ export function range(start, stop, step) {
   if (!range.length) range.push(old);
   return range;
 }
-
+// 类似于assign函数
 export function alias_for(obj, names) {
   Object.keys(names).forEach(n => {
     obj[n] = obj[names[n]];
   });
   return obj;
 }
-
+// 是否是大小写字母
 export function is_letter(c) {
   return /^[a-zA-Z]$/.test(c);
 }
@@ -43,7 +43,7 @@ export function is_nil(s) {
 export function is_empty(value) {
   return is_nil(value) || value === '';
 }
-
+// 懒执行函数
 export function lazy(fn) {
   let wrap = () => fn;
   wrap.lazy = true;
@@ -64,25 +64,25 @@ export function sequence(count, fn) {
   }
   return ret;
 }
-
+// 生成单元格id
 export function cell_id(x, y, z) {
   return 'c-' + x + '-' + y + '-' + z;
 }
-
+// 返回深层的 value 值
 export function get_value(input) {
   while (input && input.value) {
     return get_value(input.value);
   }
   return is_nil(input) ? '' : input;
 }
-
+// 格式化png名字，没有值就使用当前时间戳，有 .png 后缀就去掉，后面统一加上 .png
 export function normalize_png_name(name) {
   let prefix = is_nil(name)
     ? Date.now()
     : String(name).replace(/\/.png$/g, '');
   return prefix + '.png';
 }
-
+// 图片加载成功回调
 export function cache_image(src, fn, delay = 0) {
   let img = new Image();
   img.crossOrigin = 'anonymous';
@@ -91,17 +91,18 @@ export function cache_image(src, fn, delay = 0) {
     setTimeout(fn, delay);
   }
 }
-
+// /i忽略大小写，
+// 这个没太懂
 export function is_safari() {
   return /^((?!chrome|android).)*safari/i.test(navigator.userAgent);
 }
-
+// 反转义
 export function un_entity(code) {
   let textarea = document.createElement('textarea');
   textarea.innerHTML = code;
   return textarea.value;
 }
-
+// 转义
 export function entity(code) {
   return code
     .replace(/&/g, '&amp;')
@@ -109,7 +110,7 @@ export function entity(code) {
     .replace(/>/g, '&gt;')
     .replace(/"/g, '&quot;')
 }
-
+// hash
 export function hash(str) {
   let hash = 0;
   for (let i = 0; i < str.length; i++) {
@@ -119,7 +120,7 @@ export function hash(str) {
   }
   return hash;
 }
-
+// 这个不太懂
 export function make_tag_function(fn) {
   let get_value = v => is_nil(v) ? '' : v;
   return (input, ...vars) => {

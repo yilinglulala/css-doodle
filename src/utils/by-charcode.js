@@ -1,3 +1,4 @@
+// 还是不太懂
 export default function by_charcode(fn) {
   return (...args) => {
     let codes = args.map(n => String(n).charCodeAt(0));

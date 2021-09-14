@@ -16,7 +16,7 @@ export function get_all_variables(element) {
   }
   return inline(ret);
 }
-
+// 获取元素element 的属性name 的值
 export function get_variable(element, name) {
   return getComputedStyle(element).getPropertyValue(name)
     .trim()
@@ -24,6 +24,11 @@ export function get_variable(element, name) {
 
 }
 
+/**
+ * {a:1,b:2} => "a:1;b:2"
+ * @param {Object} map 
+ * @returns String
+ */
 function inline(map) {
   let result = [];
   for (let prop in map) {

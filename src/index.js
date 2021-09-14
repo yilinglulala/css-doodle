@@ -22,13 +22,18 @@ import {
 class Doodle extends HTMLElement {
   constructor() {
     super();
+    // https://developer.mozilla.org/zh-CN/docs/Web/API/Element/attachShadow
+    // open 指 可以从js外部访问根节点
+    // element.shadowRoot; // 返回一个ShadowRoot对象
     this.doodle = this.attachShadow({ mode: 'open' });
     this.extra = {
-      get_variable: name => get_variable(this, name)
+      get_variable: name => get_variable(this, name) 
     };
   }
 
   connectedCallback(again) {
+    // document.readyState文档准备状态，loading（正在加载），interactive（可交互），complete（完成）
+    // 确保load可以执行，如果是loading状态就延时执行
     if (/^(complete|interactive|loaded)$/.test(document.readyState)) {
       this.load(again);
     } else {
@@ -37,16 +42,19 @@ class Doodle extends HTMLElement {
   }
 
   update(styles) {
+    // 获取use 属性
     let use = this.get_use();
     if (!styles) styles = this.innerHTML;
+
     this.innerHTML = styles;
 
     if (!this.grid_size) {
+      // {x,y,z,count,ratio}
       this.grid_size = this.get_grid();
     }
 
     let { x: gx, y: gy, z: gz } = this.grid_size;
-
+    
     const compiled = this.generate(
       parse_css(use + styles, this.extra)
     );
@@ -147,11 +155,11 @@ class Doodle extends HTMLElement {
       this[name] = new_val;
     }
   }
-
+  // 获取grid 属性
   get_grid() {
     return parse_grid(this.attr('grid'));
   }
-
+  // 获取use 属性，并转成 @use 开头
   get_use() {
     let use = this.attr('use') || '';
     if (use) use = `@use:${ use };`;
@@ -271,6 +279,7 @@ class Doodle extends HTMLElement {
   }
 
   load(again) {
+    // again为假值时，若有click-to-update，则点击触发，否则不触发
     if (!again) {
       if (this.hasAttribute('click-to-update')) {
         this.addEventListener('click', e => this.update());
